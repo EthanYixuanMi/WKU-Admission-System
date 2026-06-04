@@ -199,18 +199,46 @@ classDiagram
 
 ## 9. Test Plan and Results
 
-| Test Case | Steps | Expected Result | Status |
-|---|---|---|---|
-| TC-01 Login as student | Use `1306031@wku.edu.cn / student123` | Student dashboard opens | Pass |
-| TC-02 Login as officer | Use `officer@wku.edu / officer123` | Officer review dashboard opens | Pass |
-| TC-03 Login as admin | Use `admin@wku.edu / admin123` | Admin dashboard opens | Pass |
-| TC-04 View application form | Student opens application form | Existing application data appears | Pass |
-| TC-05 View review page | Officer opens application #1 | Applicant details and documents appear | Pass |
-| TC-06 SQL schema import | Import `database/schema.sql` | Tables and demo rows are created | Pass |
-| TC-07 PHP syntax check | Run `php -l` on project files | No PHP syntax errors | Pass |
-| TC-08 Inquiry workflow | Student submits inquiry and staff replies | Student sees response and updated status | Pass |
-| TC-09 Offer and enrollment workflow | Officer approves application and student accepts offer | Offer and enrollment records update | Pass |
-| TC-10 Payment management | Admin updates payment status | Student sees updated application fee status | Pass |
+### 9.1 Test Environment
+
+| Item | Value |
+|---|---|
+| Local Server | WampServer 64-bit |
+| Web URL | `http://localhost/WKU-Admission-System/` |
+| PHP Version | PHP 8.x through WampServer |
+| Database | MySQL `wku_admission` |
+| Browser | Google Chrome |
+| Test Date | June 4, 2026 |
+
+### 9.2 Demo Accounts Used
+
+| Role | Account | Password |
+|---|---|---|
+| Student | `1306031@wku.edu.cn` | `student123` |
+| Student | `1307943@wku.edu.cn` | `student123` |
+| Admission Officer | `officer@wku.edu` | `officer123` |
+| Admin | `admin@wku.edu` | `admin123` |
+
+### 9.3 Test Case Record
+
+| Test Case | Steps | Expected Result | Actual Result | Evidence | Status |
+|---|---|---|---|---|---|
+| TC-01 Student Login | Open login page and log in with `1306031@wku.edu.cn / student123`. | Student dashboard opens. | Student dashboard opened successfully for Steve. | `02-student-dashboard-steve.png` | Pass |
+| TC-02 Officer Login | Log out and log in with `officer@wku.edu / officer123`. | Officer dashboard opens. | Officer review dashboard opened successfully. | `06-officer-dashboard.png` | Pass |
+| TC-03 Admin Login | Log out and log in with `admin@wku.edu / admin123`. | Admin dashboard opens. | Admin dashboard opened successfully with reports and statistics. | `09-admin-dashboard-full.png` | Pass |
+| TC-04 Application Form | Student opens the online application form. | Existing application information appears and can be edited. | Application form displayed program, intake, personal, passport, academic, and English score fields. | `03-student-application-form.png` | Pass |
+| TC-05 Document Upload View | Student opens document upload page. | Upload form and uploaded document list appear. | Document upload page displayed document type, file upload control, and uploaded document records. | `04-student-document-upload.png` | Pass |
+| TC-06 Officer Document Verification | Officer opens application review page and checks uploaded documents. | Documents can be marked Pending, Verified, or Rejected with remarks. | Application review page displayed document verification controls and verified document records. | `07-officer-review-application.png` | Pass |
+| TC-07 Application Decision | Officer updates application decision to Approved. | Application status changes and review history is recorded. | Application was marked Approved and review history was displayed. | `07-officer-review-application.png`, `14-email-application-approved.jpg` | Pass |
+| TC-08 Offer Letter | Student dashboard displays offer letter after approval. | Offer letter appears and student can accept it. | Offer letter was issued and accepted. | `02-student-dashboard-steve.png`, `13-email-offer-letter-issued.jpg` | Pass |
+| TC-09 Enrollment Tracking | Student accepts offer and confirms enrollment. | Enrollment status updates to Enrolled. | Admin enrollment report showed the enrolled student record. | `10-admin-enrollment-report.png` | Pass |
+| TC-10 Student Inquiry | Student opens inquiry page and views inquiry history. | Student can submit inquiries and view replies. | Inquiry history displayed an answered enrollment question. | `05-student-inquiries.png` | Pass |
+| TC-11 Staff Inquiry Response | Officer/Admin opens inquiry management page. | Staff can view and reply to student inquiries. | Inquiry management page showed question, reply, responder, and status. | `08-staff-inquiry-management.png`, `12-admin-inquiry-management.png` | Pass |
+| TC-12 Payment Management | Admin opens payment management section and updates payment status. | Payment records can be viewed and updated. | Payment management table appeared in admin dashboard. | `09-admin-dashboard-full.png` | Pass |
+| TC-13 Email Notification Log | Admin checks Email Log after workflow actions. | Email delivery attempts are recorded as Sent or Failed. | Email Log displayed sent notification records. | `11-admin-email-log.png` | Pass |
+| TC-14 Real Email Notification | Check the real student email inbox after workflow actions. | Student receives admission notification emails. | Student mailbox received application submitted, document status, approved, and offer letter emails. | `13-email-offer-letter-issued.jpg`, `14-email-application-approved.jpg`, `15-email-document-verified.jpg`, `17-email-application-submitted.jpg` | Pass |
+| TC-15 SQL Schema Import | Import `database/schema.sql` into MySQL. | All database tables and demo rows are created. | `wku_admission` database contained all required tables and four demo users. | Database verification command output | Pass |
+| TC-16 PHP Syntax Check | Run `php -l` on all PHP files. | No PHP syntax errors. | All PHP files passed syntax check. | CLI verification output | Pass |
 
 ## 10. Bug Report
 
@@ -219,14 +247,38 @@ classDiagram
 | PowerShell does not support Bash-style SQL import redirection with `<` | Low | Fixed by using `Get-Content schema.sql | mysql` |
 | WampServer PHP reports an Xdebug DLL version warning in CLI | Low | Known environment warning; web app still runs |
 
-## 11. User Acceptance Summary
+## 11. Group Contribution
 
-The MVP supports the required admission workflow: student application submission, document upload, officer review, status updates, notifications, admin monitoring, and announcements. The system is ready for classroom demonstration using the provided demo accounts.
+### 11.1 Group Members
 
-## 12. Deployment Guide
+| Member | College | University | Location | Email |
+|---|---|---|---|---|
+| Yunxi Zhao | College of Science, Mathematics and Technology | Wenzhou-Kean University | Wenzhou, China | `1307816@wku.edu.cn` |
+| Yixuan Mi | College of Science, Mathematics and Technology | Wenzhou-Kean University | Wenzhou, China | `1307943@wku.edu.cn` |
+| Qiyang Yu | College of Science, Mathematics and Technology | Wenzhou-Kean University | Wenzhou, China | `1306031@wku.edu.cn` |
+| Sihang Wang | College of Science, Mathematics and Technology | Wenzhou-Kean University | Wenzhou, China | `1337436@wku.edu.cn` |
 
-1. Copy the project folder to `C:\wamp64\www\wku_admission`.
+### 11.2 Equal Contribution Summary
+
+All four group members participated equally in the project. The team divided the project work across system requirements, system design, implementation, testing, documentation, and presentation preparation.
+
+| Member | Main Contribution Areas | Contribution Percentage |
+|---|---|---|
+| Yunxi Zhao | Requirements analysis, use case design, student module review, documentation support, and final presentation preparation. | 25% |
+| Yixuan Mi | Database design, application workflow design, officer review module support, testing support, and final presentation preparation. | 25% |
+| Qiyang Yu | Student application module, document upload workflow, email notification testing, screenshot evidence collection, and final presentation preparation. | 25% |
+| Sihang Wang | Admin dashboard, reporting workflow, inquiry module review, test record preparation, and final presentation preparation. | 25% |
+
+Although specific tasks were divided for efficiency, all members reviewed the complete system workflow, including requirements, database structure, user roles, application submission, document verification, communication, offer letter updates, enrollment tracking, testing, and deployment.
+
+## 12. User Acceptance Summary
+
+The MVP supports the required international admission workflow: student application submission, document upload, officer review, status updates, notifications, student inquiries, offer letter updates, enrollment tracking, payment management, admin reporting, and email notification evidence. The system is ready for classroom demonstration using the provided demo accounts.
+
+## 13. Deployment Guide
+
+1. Copy the project folder to `C:\wamp64\www\WKU-Admission-System`.
 2. Start WampServer.
 3. Import `database/schema.sql` into MySQL.
-4. Open `http://localhost/wku_admission/`.
+4. Open `http://localhost/WKU-Admission-System/`.
 5. Log in with the demo accounts.
