@@ -26,6 +26,11 @@ The system is a web-based admission management platform for international studen
 | FR-08 | Officers can mark applications as Under Review, Need More Documents, Approved, or Rejected. |
 | FR-09 | Admins can view user, application, and document statistics. |
 | FR-10 | Admins can publish announcements and deadlines. |
+| FR-11 | Students can submit inquiries and view staff replies. |
+| FR-12 | Approved students can view and accept offer letters. |
+| FR-13 | Students can confirm enrollment after accepting an offer. |
+| FR-14 | Admins can manage payment records and user roles. |
+| FR-15 | The system records queued email notifications for later SMTP delivery. |
 
 ## 4. Non-Functional Requirements
 
@@ -36,7 +41,7 @@ The system is a web-based admission management platform for international studen
 | NFR-03 | Provide role-based access control. |
 | NFR-04 | Use a responsive interface for desktop and mobile screens. |
 | NFR-05 | Support fast document upload and retrieval through local WampServer storage. |
-| NFR-06 | Keep database tables normalized around users, applications, documents, reviews, payments, and notifications. |
+| NFR-06 | Keep database tables normalized around users, applications, documents, reviews, payments, notifications, inquiries, offers, and enrollments. |
 
 ## 5. Use Case Descriptions
 
@@ -174,6 +179,10 @@ classDiagram
 | payments | Stores application fee records |
 | reviews | Stores officer decisions and feedback |
 | announcements | Stores admin announcements and deadlines |
+| offer_letters | Stores issued admission offers |
+| enrollments | Tracks offer acceptance and enrollment confirmation |
+| inquiries | Stores student questions and staff replies |
+| email_logs | Stores queued email notification records |
 
 ## 8. UI Screens
 
@@ -192,13 +201,16 @@ classDiagram
 
 | Test Case | Steps | Expected Result | Status |
 |---|---|---|---|
-| TC-01 Login as student | Use `student@wku.edu / student123` | Student dashboard opens | Pass |
+| TC-01 Login as student | Use `1306031@wku.edu.cn / student123` | Student dashboard opens | Pass |
 | TC-02 Login as officer | Use `officer@wku.edu / officer123` | Officer review dashboard opens | Pass |
 | TC-03 Login as admin | Use `admin@wku.edu / admin123` | Admin dashboard opens | Pass |
 | TC-04 View application form | Student opens application form | Existing application data appears | Pass |
 | TC-05 View review page | Officer opens application #1 | Applicant details and documents appear | Pass |
 | TC-06 SQL schema import | Import `database/schema.sql` | Tables and demo rows are created | Pass |
 | TC-07 PHP syntax check | Run `php -l` on project files | No PHP syntax errors | Pass |
+| TC-08 Inquiry workflow | Student submits inquiry and staff replies | Student sees response and updated status | Pass |
+| TC-09 Offer and enrollment workflow | Officer approves application and student accepts offer | Offer and enrollment records update | Pass |
+| TC-10 Payment management | Admin updates payment status | Student sees updated application fee status | Pass |
 
 ## 10. Bug Report
 

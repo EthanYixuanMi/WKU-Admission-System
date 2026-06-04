@@ -23,10 +23,13 @@ $pageTitle = $pageTitle ?? 'WKU Admission';
                 <a href="student_dashboard.php">Dashboard</a>
                 <a href="application_form.php">Application</a>
                 <a href="upload_document.php">Documents</a>
+                <a href="student_inquiries.php">Inquiries</a>
             <?php elseif ($currentUser['role'] === 'officer'): ?>
                 <a href="officer_dashboard.php">Review</a>
+                <a href="manage_inquiries.php">Inquiries</a>
             <?php elseif ($currentUser['role'] === 'admin'): ?>
                 <a href="admin_dashboard.php">Admin</a>
+                <a href="manage_inquiries.php">Inquiries</a>
             <?php endif; ?>
         </nav>
         <div class="account">

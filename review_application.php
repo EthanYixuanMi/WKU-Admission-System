@@ -51,6 +51,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 $documents = $service->getDocuments($applicationId);
 $reviews = $service->reviewsForApplication($applicationId);
+$payment = $service->paymentForApplication($applicationId);
+if ($application['status'] === 'Approved') {
+    $service->issueOfferLetter($applicationId);
+}
+$offer = $service->offerForApplication($applicationId);
+$enrollment = $service->enrollmentForApplication($applicationId);
 
 $pageTitle = 'Review Application';
 require_once __DIR__ . '/includes/header.php';
@@ -80,6 +86,41 @@ require_once __DIR__ . '/includes/header.php';
     <article class="panel">
         <h2>Personal Statement</h2>
         <p><?= nl2br(e($application['personal_statement'])) ?></p>
+    </article>
+</section>
+
+<section class="grid three" style="margin-top: 18px;">
+    <article class="panel">
+        <h2>Payment</h2>
+        <?php if (!$payment): ?>
+            <p class="muted">No payment record.</p>
+        <?php else: ?>
+            <p><strong>Amount:</strong> $<?= number_format((float) $payment['amount'], 2) ?></p>
+            <p><strong>Status:</strong> <span class="<?= e(status_class($payment['status'])) ?>"><?= e($payment['status']) ?></span></p>
+            <p><strong>Remarks:</strong> <?= e($payment['remarks'] ?: '-') ?></p>
+        <?php endif; ?>
+    </article>
+
+    <article class="panel">
+        <h2>Offer Letter</h2>
+        <?php if (!$offer): ?>
+            <p class="muted">Offer letter appears after approval.</p>
+        <?php else: ?>
+            <p><strong>Code:</strong> <?= e($offer['offer_code']) ?></p>
+            <p><strong>Status:</strong> <span class="<?= e(status_class($offer['status'])) ?>"><?= e($offer['status']) ?></span></p>
+            <p><strong>Issued:</strong> <?= format_datetime($offer['issued_at']) ?></p>
+        <?php endif; ?>
+    </article>
+
+    <article class="panel">
+        <h2>Enrollment</h2>
+        <?php if (!$enrollment): ?>
+            <p class="muted">Enrollment tracking opens after offer issue.</p>
+        <?php else: ?>
+            <p><strong>Status:</strong> <span class="<?= e(status_class($enrollment['status'])) ?>"><?= e($enrollment['status']) ?></span></p>
+            <p><strong>Response:</strong> <?= format_datetime($enrollment['student_response_at']) ?></p>
+            <p><strong>Enrolled:</strong> <?= format_datetime($enrollment['enrolled_at']) ?></p>
+        <?php endif; ?>
     </article>
 </section>
 

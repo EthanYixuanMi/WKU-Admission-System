@@ -14,14 +14,35 @@ if (!$application) {
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $type = trim($_POST['type'] ?? '');
     $file = $_FILES['document'] ?? null;
-    $allowed = ['pdf', 'jpg', 'jpeg', 'png', 'doc', 'docx'];
+    $allowedTypes = ['Passport', 'Transcript', 'English Test', 'Recommendation', 'Other'];
+    $allowed = [
+        'pdf' => ['application/pdf'],
+        'jpg' => ['image/jpeg'],
+        'jpeg' => ['image/jpeg'],
+        'png' => ['image/png'],
+        'doc' => ['application/msword', 'application/octet-stream'],
+        'docx' => ['application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/zip', 'application/octet-stream'],
+    ];
 
     if ($type === '' || !$file || $file['error'] !== UPLOAD_ERR_OK) {
         set_flash('error', 'Please choose a document type and file.');
+    } elseif (!in_array($type, $allowedTypes, true)) {
+        set_flash('error', 'Invalid document type.');
     } else {
         $extension = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
-        if (!in_array($extension, $allowed, true)) {
+        $mimeType = '';
+        if (function_exists('finfo_open')) {
+            $finfo = finfo_open(FILEINFO_MIME_TYPE);
+            $mimeType = $finfo ? (string) finfo_file($finfo, $file['tmp_name']) : '';
+            if ($finfo) {
+                finfo_close($finfo);
+            }
+        }
+
+        if (!array_key_exists($extension, $allowed)) {
             set_flash('error', 'Only PDF, Word, JPG, and PNG files are allowed.');
+        } elseif ($mimeType !== '' && !in_array($mimeType, $allowed[$extension], true)) {
+            set_flash('error', 'The selected file type does not match its extension.');
         } elseif ($file['size'] > 8 * 1024 * 1024) {
             set_flash('error', 'File size must be 8MB or smaller.');
         } else {
