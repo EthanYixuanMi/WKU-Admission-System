@@ -264,17 +264,23 @@ wku_admission/
 │   └── styles.css
 │
 ├── config/
-│   └── database.php
+│   ├── database.php
+│   └── mail.php
 │
 ├── database/
-│   └── schema.sql
+│   ├── schema.sql
+│   └── feature_upgrade.sql
 │
 ├── docs/
-│   └── OOAD_Documentation.md
+│   ├── OOAD_Documentation.md
+│   ├── Group_Contribution.md
+│   ├── Test_Record.md
+│   └── screenshots/
 │
 ├── includes/
 │   ├── ApplicationService.php
 │   ├── Auth.php
+│   ├── EmailService.php
 │   ├── helpers.php
 │   ├── header.php
 │   └── footer.php
@@ -282,12 +288,16 @@ wku_admission/
 ├── uploads/
 │
 ├── index.php
+├── login.php
+├── logout.php
 ├── register.php
 ├── student_dashboard.php
 ├── application_form.php
 ├── upload_document.php
+├── student_inquiries.php
 ├── officer_dashboard.php
 ├── review_application.php
+├── manage_inquiries.php
 ├── admin_dashboard.php
 └── README.md
 ```
