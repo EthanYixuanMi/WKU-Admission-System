@@ -129,68 +129,11 @@ flowchart TD
 
 ## 7. Student Application Submission Sequence
 
-```mermaid
-sequenceDiagram
-    actor Student
-    participant UI as PHP Web UI
-    participant Auth as Auth Class
-    participant Service as ApplicationService
-    participant Email as EmailService
-    participant DB as MySQL Database
-
-    Student->>UI: Log in
-    UI->>Auth: Verify email and password
-    Auth->>DB: Query user record
-    DB-->>Auth: Return user data
-    Auth-->>UI: Create authenticated session
-
-    Student->>UI: Fill and submit application form
-    UI->>Service: saveApplication(userId, data, submit=true)
-    Service->>DB: Insert or update application
-    Service->>DB: Ensure payment record
-    Service->>DB: Create student and officer notifications
-    Service->>Email: queueToUser(student / officer)
-    Email->>DB: Insert email log
-    DB-->>Service: Return success
-    UI-->>Student: Show submitted status and fee tracking
-```
+![Preview](Student_Application_Submission_Sequence.png)
 
 ## 7.1 Officer Approval, Offer Letter, and Enrollment Sequence
 
-```mermaid
-sequenceDiagram
-    actor Officer
-    actor Student
-    participant ReviewUI as Review Application Page
-    participant Dashboard as Student Dashboard
-    participant Service as ApplicationService
-    participant Email as EmailService
-    participant DB as MySQL Database
-
-    Officer->>ReviewUI: Approve application with remarks
-    ReviewUI->>Service: reviewApplication(applicationId, officerId, Approved, remarks)
-    Service->>DB: Update application status and insert review
-    Service->>Service: issueOfferLetter(applicationId)
-    Service->>DB: Insert or update offer_letters
-    Service->>DB: Ensure enrollment record
-    Service->>Email: queueToUser(student, offer issued message)
-    Email->>DB: Insert email log
-    Service-->>ReviewUI: Approval saved
-
-    Student->>Dashboard: View offer letter
-    Dashboard->>Service: acceptOffer(applicationId, userId)
-    Service->>DB: Mark offer Accepted and enrollment Offer Accepted
-    Service->>Email: queueToUser(student, offer accepted confirmation)
-    Email->>DB: Insert email log
-    Dashboard-->>Student: Show enrollment confirmation action
-
-    Student->>Dashboard: Confirm enrollment
-    Dashboard->>Service: confirmEnrollment(applicationId, userId)
-    Service->>DB: Mark enrollment Enrolled
-    Service->>Email: queueToUser(student, enrollment confirmed message)
-    Email->>DB: Insert email log
-    Dashboard-->>Student: Show enrolled status
-```
+![Preview](Officer_Approval_Offer Letter_and_Enrollment_Sequence.png)
 
 ---
 
