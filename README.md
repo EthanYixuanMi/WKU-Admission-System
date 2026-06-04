@@ -133,7 +133,7 @@ flowchart TD
 
 ## 7.1 Officer Approval, Offer Letter, and Enrollment Sequence
 
-![Preview](Officer_Approval_Offer Letter_and_Enrollment_Sequence.png)
+![Preview](Officer_Approval_Offer_Letter_and_Enrollment_Sequence.png)
 
 ---
 
