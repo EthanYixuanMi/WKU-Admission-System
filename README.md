@@ -98,17 +98,25 @@ flowchart TD
     A[Student Registers / Logs In] --> B[Fill Application Form]
     B --> C[Upload Required Documents]
     C --> D[Submit Application]
-    D --> E[Officer Reviews Application]
-    E --> F{Documents Complete?}
-    F -- No --> G[Need More Documents]
-    G --> H[Student Receives Notification]
-    H --> C
-    F -- Yes --> I[Officer Makes Decision]
-    I --> J{Decision}
-    J -- Approved --> K[Application Approved]
-    J -- Rejected --> L[Application Rejected]
-    K --> M[Student Views Final Status]
-    L --> M
+    D --> E[Create Application Fee Record]
+    E --> F[Officer Reviews Application]
+    F --> G{Documents Complete?}
+    G -- No --> H[Need More Documents]
+    H --> I[Student Receives Notification and Email Log Entry]
+    I --> C
+    G -- Yes --> J[Officer Makes Decision]
+    J --> K{Decision}
+    K -- Approved --> L[Application Approved]
+    L --> M[Generate Offer Letter]
+    M --> N[Send Email Notification / Save Email Log]
+    N --> O[Student Views and Accepts Offer Letter]
+    O --> P[Confirm Enrollment]
+    P --> Q[Student Views Final Enrollment Status]
+    K -- Rejected --> R[Application Rejected]
+    R --> S[Student Receives Decision Notification]
+
+    T[Student Submits Inquiry] --> U[Officer or Admin Replies Inquiry]
+    U --> V[Student Views Inquiry Reply]
 ```
 
 ---
@@ -126,30 +134,45 @@ flowchart LR
     UC3[Upload Documents]
     UC4[Track Application Status]
     UC5[Receive Notifications]
+    UC6[Submit Inquiry]
+    UC7[View / Accept Offer Letter]
+    UC8[Confirm Enrollment]
 
-    UC6[Review Applications]
-    UC7[Verify Documents]
-    UC8[Approve or Reject Applications]
+    UC9[Review Applications]
+    UC10[Verify Documents]
+    UC11[Approve or Reject Applications]
+    UC12[Reply Inquiry]
 
-    UC9[Manage Users]
-    UC10[View Statistics and Reports]
-    UC11[Publish Announcements]
+    UC13[Manage Users]
+    UC14[View Statistics and Reports]
+    UC15[Publish Announcements]
+    UC16[Manage Payment]
+    UC17[View Email Log]
+    UC18[Track Enrollment Reports]
 
     Student --> UC1
     Student --> UC2
     Student --> UC3
     Student --> UC4
     Student --> UC5
+    Student --> UC6
+    Student --> UC7
+    Student --> UC8
 
     Officer --> UC1
-    Officer --> UC6
-    Officer --> UC7
-    Officer --> UC8
+    Officer --> UC9
+    Officer --> UC10
+    Officer --> UC11
+    Officer --> UC12
 
     Admin --> UC1
-    Admin --> UC9
-    Admin --> UC10
-    Admin --> UC11
+    Admin --> UC12
+    Admin --> UC13
+    Admin --> UC14
+    Admin --> UC15
+    Admin --> UC16
+    Admin --> UC17
+    Admin --> UC18
 ```
 
 ---
@@ -162,6 +185,7 @@ sequenceDiagram
     participant UI as PHP Web UI
     participant Auth as Auth Class
     participant Service as ApplicationService
+    participant Email as EmailService
     participant DB as MySQL Database
 
     Student->>UI: Log in
@@ -170,12 +194,52 @@ sequenceDiagram
     DB-->>Auth: Return user data
     Auth-->>UI: Create authenticated session
 
-    Student->>UI: Fill application form
-    UI->>Service: Save application data
+    Student->>UI: Fill and submit application form
+    UI->>Service: saveApplication(userId, data, submit=true)
     Service->>DB: Insert or update application
-    Service->>DB: Create notification
+    Service->>DB: Ensure payment record
+    Service->>DB: Create student and officer notifications
+    Service->>Email: queueToUser(student / officer)
+    Email->>DB: Insert email log
     DB-->>Service: Return success
-    UI-->>Student: Show submitted status
+    UI-->>Student: Show submitted status and fee tracking
+```
+
+## 7.1 Officer Approval, Offer Letter, and Enrollment Sequence
+
+```mermaid
+sequenceDiagram
+    actor Officer
+    actor Student
+    participant ReviewUI as Review Application Page
+    participant Dashboard as Student Dashboard
+    participant Service as ApplicationService
+    participant Email as EmailService
+    participant DB as MySQL Database
+
+    Officer->>ReviewUI: Approve application with remarks
+    ReviewUI->>Service: reviewApplication(applicationId, officerId, Approved, remarks)
+    Service->>DB: Update application status and insert review
+    Service->>Service: issueOfferLetter(applicationId)
+    Service->>DB: Insert or update offer_letters
+    Service->>DB: Ensure enrollment record
+    Service->>Email: queueToUser(student, offer issued message)
+    Email->>DB: Insert email log
+    Service-->>ReviewUI: Approval saved
+
+    Student->>Dashboard: View offer letter
+    Dashboard->>Service: acceptOffer(applicationId, userId)
+    Service->>DB: Mark offer Accepted and enrollment Offer Accepted
+    Service->>Email: queueToUser(student, offer accepted confirmation)
+    Email->>DB: Insert email log
+    Dashboard-->>Student: Show enrollment confirmation action
+
+    Student->>Dashboard: Confirm enrollment
+    Dashboard->>Service: confirmEnrollment(applicationId, userId)
+    Service->>DB: Mark enrollment Enrolled
+    Service->>Email: queueToUser(student, enrollment confirmed message)
+    Email->>DB: Insert email log
+    Dashboard-->>Student: Show enrolled status
 ```
 
 ---
@@ -267,13 +331,106 @@ classDiagram
         +saveApplication(userId, data, submit) int
         +addDocument(applicationId, type, fileName, filePath)
         +getDocuments(applicationId) array
+        +setDocumentStatus(documentId, status, remarks)
         +reviewApplication(applicationId, officerId, decision, remarks)
+        +ensurePayment(applicationId)
+        +updatePayment(applicationId, amount, status, remarks)
+        +paymentsForReport() array
+        +issueOfferLetter(applicationId)
+        +offerForApplication(applicationId) array
+        +acceptOffer(applicationId, userId) bool
+        +ensureEnrollment(applicationId)
+        +confirmEnrollment(applicationId, userId) bool
+        +enrollmentsForReport() array
+        +createInquiry(userId, applicationId, subject, message) int
+        +inquiriesForUser(userId) array
+        +inquiriesForStaff(status) array
+        +respondInquiry(inquiryId, responderId, response, status)
+        +emailLogs(limit) array
         +applicationCounts() array
         +addAnnouncement(adminId, title, body, deadline)
     }
 
+    class EmailService {
+        +smtpEnabled() bool
+        +queueToUser(userId, subject, body)
+        +queue(userId, recipientEmail, subject, body)
+        +recentLogs(limit) array
+    }
+
+    class User {
+        +user_id int
+        +name string
+        +email string
+        +role enum
+    }
+
+    class Application {
+        +application_id int
+        +user_id int
+        +program string
+        +status enum
+        +submission_date datetime
+    }
+
+    class Document {
+        +document_id int
+        +application_id int
+        +type string
+        +status enum
+    }
+
+    class Payment {
+        +payment_id int
+        +application_id int
+        +amount decimal
+        +status enum
+    }
+
+    class OfferLetter {
+        +offer_id int
+        +application_id int
+        +offer_code string
+        +status enum
+        +issued_at datetime
+    }
+
+    class Enrollment {
+        +enrollment_id int
+        +application_id int
+        +status enum
+        +student_response_at datetime
+        +enrolled_at datetime
+    }
+
+    class Inquiry {
+        +inquiry_id int
+        +user_id int
+        +application_id int
+        +subject string
+        +status enum
+    }
+
+    class EmailLog {
+        +email_id int
+        +user_id int
+        +recipient_email string
+        +subject string
+        +status enum
+    }
+
     Database <.. Auth
     Database <.. ApplicationService
+    Database <.. EmailService
+    ApplicationService ..> EmailService
+    User "1" --> "0..*" Application
+    Application "1" --> "0..*" Document
+    Application "1" --> "0..1" Payment
+    Application "1" --> "0..1" OfferLetter
+    Application "1" --> "0..1" Enrollment
+    User "1" --> "0..*" Inquiry
+    Application "0..1" --> "0..*" Inquiry
+    User "0..1" --> "0..*" EmailLog
 ```
 
 ---
@@ -419,8 +576,11 @@ flowchart TD
     C --> D[Officer Reviews Document]
     D --> E{Verification Result}
     E -- Verified --> F[Document Status: Verified]
-    E -- Rejected --> G[Document Status: Rejected]
-    G --> H[Student Receives Feedback]
+    F --> G[Student Receives Notification]
+    E -- Rejected --> H[Document Status: Rejected]
+    H --> I[Student Receives Feedback]
+    I --> J[Email Notification Queued / Email Log Saved]
+    G --> J
 ```
 
 ---
