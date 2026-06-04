@@ -43,7 +43,11 @@ The goal of this MVP is to demonstrate a complete online admission workflow usin
 - Personal, passport, academic, program, and English score information submission
 - Document upload
 - Application status tracking
+- Application fee status tracking
+- Offer letter viewing and acceptance
+- Enrollment confirmation
 - Notification viewing
+- Inquiry submission and reply tracking
 - Announcement viewing
 
 ### Admission Officer Features
@@ -53,6 +57,8 @@ The goal of this MVP is to demonstrate a complete online admission workflow usin
 - Review application details
 - Verify or reject uploaded documents
 - Add review remarks
+- Respond to student inquiries
+- Monitor offer and enrollment progress
 - Update application status:
   - Under Review
   - Need More Documents
@@ -63,8 +69,12 @@ The goal of this MVP is to demonstrate a complete online admission workflow usin
 
 - Admin login
 - View system statistics
-- Manage users
+- Manage users and admin profile information
 - View application reports
+- Manage application fee records
+- Track enrollment reports
+- View email notification log
+- Respond to student inquiries
 - Publish announcements
 - Set admission-related deadlines
 
@@ -74,7 +84,8 @@ The goal of this MVP is to demonstrate a complete online admission workflow usin
 
 | Role | Email | Password |
 |---|---|---|
-| Student | `student@wku.edu` | `student123` |
+| Student | `1306031@wku.edu.cn` | `student123` |
+| Student | `1307943@wku.edu.cn` | `student123` |
 | Admission Officer | `officer@wku.edu` | `officer123` |
 | Admin | `admin@wku.edu` | `admin123` |
 
@@ -227,6 +238,10 @@ Main database tables:
 | `payments` | Stores application fee records |
 | `reviews` | Stores officer review decisions and feedback |
 | `announcements` | Stores admin announcements and deadlines |
+| `offer_letters` | Stores issued admission offers |
+| `enrollments` | Tracks offer acceptance and enrollment confirmation |
+| `inquiries` | Stores student inquiries and staff replies |
+| `email_logs` | Stores queued email notifications until SMTP is connected |
 
 ---
 
@@ -333,6 +348,34 @@ Configuration file:
 ```text
 config/database.php
 ```
+
+---
+
+## 12.1 Email Notification Configuration
+
+Default email settings are stored in:
+
+```text
+config/mail.php
+```
+
+Private SMTP credentials should be stored in:
+
+```text
+config/mail.local.php
+```
+
+This local file is ignored by Git. For QQ Mail, use:
+
+| Item | Value |
+|---|---|
+| SMTP Host | `smtp.qq.com` |
+| SMTP Port | `465` |
+| Encryption | `ssl` |
+| Username | QQ email address |
+| Password | QQ SMTP authorization code |
+
+Automatic notification delivery attempts are recorded in the Admin Dashboard Email Log as `Queued`, `Sent`, or `Failed`.
 
 ---
 
@@ -449,13 +492,10 @@ This MVP includes several basic security practices:
 
 Possible future improvements include:
 
-- Email notification integration
-- More detailed application fee management
+- Live SMTP email delivery
 - PDF export for admission reports
 - Advanced search and filtering for officers
-- Admin user editing and account suspension
-- Stronger file validation for uploaded documents
-- More responsive UI design
+- Admin account suspension
 - Deployment to a real web server
 
 ---

@@ -170,6 +170,11 @@ a:hover {
     grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr));
 }
 
+.stack {
+    display: grid;
+    gap: 18px;
+}
+
 .panel,
 .metric,
 .table-panel {
@@ -211,6 +216,10 @@ a:hover {
     display: grid;
     gap: 16px;
     grid-template-columns: repeat(auto-fit, minmax(min(100%, 360px), 1fr));
+}
+
+.form-grid.compact {
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
 }
 
 .field {
@@ -259,6 +268,10 @@ textarea:focus {
     flex-wrap: wrap;
     gap: 10px;
     margin-top: 18px;
+}
+
+.actions select {
+    flex: 0 1 220px;
 }
 
 .btn {
@@ -368,6 +381,39 @@ textarea:focus {
     color: var(--primary);
 }
 
+.status-issued,
+.status-open,
+.status-queued,
+.status-not-started {
+    background: #eef4ff;
+    color: var(--primary);
+}
+
+.status-accepted,
+.status-offer-accepted,
+.status-paid,
+.status-answered,
+.status-sent {
+    background: #ecfdf3;
+    color: var(--green);
+}
+
+.status-enrolled {
+    background: #e0f2fe;
+    color: var(--cyan);
+}
+
+.status-waived,
+.status-closed {
+    background: #f2f4f7;
+    color: #344054;
+}
+
+.status-failed {
+    background: #fef3f2;
+    color: var(--red);
+}
+
 .table-panel {
     overflow-x: auto;
     overflow-y: visible;
@@ -380,7 +426,8 @@ textarea:focus {
 
 table {
     border-collapse: collapse;
-    min-width: 720px;
+    min-width: 100%;
+    table-layout: auto;
     width: 100%;
 }
 
@@ -424,13 +471,14 @@ th {
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
-    min-width: 320px;
+    min-width: 0;
+    width: 100%;
 }
 
 .inline-form select,
 .inline-form input {
-    flex: 1 1 180px;
-    min-width: 160px;
+    flex: 1 1 140px;
+    min-width: 0;
     width: 100%;
 }
 
@@ -438,10 +486,33 @@ th {
     flex: 0 0 auto;
 }
 
+.toolbar-form {
+    flex: 0 1 360px;
+}
+
+.inline-form.compact {
+    flex-wrap: nowrap;
+}
+
 .review-box {
     border: 1px solid var(--line);
     border-radius: 8px;
     padding: 14px;
+}
+
+.record-header {
+    align-items: flex-start;
+    display: flex;
+    gap: 14px;
+    justify-content: space-between;
+}
+
+.record-header h2 {
+    margin-bottom: 6px;
+}
+
+.response-form {
+    margin-top: 16px;
 }
 
 .footer {
@@ -508,17 +579,22 @@ th {
         padding: 18px;
     }
 
-    table {
-        min-width: 640px;
-    }
-
     th,
     td {
         padding: 11px 12px;
     }
 
     .inline-form {
-        min-width: 280px;
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .inline-form.compact {
+        flex-wrap: wrap;
+    }
+
+    .record-header {
+        flex-direction: column;
     }
 }
 

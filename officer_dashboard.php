@@ -9,6 +9,7 @@ $validStatuses = ['Submitted', 'Under Review', 'Need More Documents', 'Approved'
 $applications = $service->applicationsForReview(in_array($filter, $validStatuses, true) ? $filter : null);
 $counts = $service->applicationCounts();
 $notifications = $service->getNotifications((int) $user['user_id'], 4);
+$openInquiries = array_slice($service->inquiriesForStaff('Open'), 0, 4);
 
 $pageTitle = 'Officer Review';
 require_once __DIR__ . '/includes/header.php';
@@ -17,9 +18,9 @@ require_once __DIR__ . '/includes/header.php';
 <section class="page-title">
     <div>
         <h1>Admission Officer Review</h1>
-        <p>Verify documents, review applications, and send admission decisions.</p>
+        <p>Verify documents, review applications, answer inquiries, and send decisions.</p>
     </div>
-    <form class="inline-form" action="officer_dashboard.php" method="get">
+    <form class="inline-form toolbar-form" action="officer_dashboard.php" method="get">
         <select name="status">
             <option value="">All statuses</option>
             <?php foreach ($validStatuses as $status): ?>
@@ -37,36 +38,55 @@ require_once __DIR__ . '/includes/header.php';
     <article class="metric"><span>Approved</span><strong><?= $counts['Approved'] ?></strong></article>
 </section>
 
-<section class="grid two" style="margin-top: 18px;">
-    <article class="table-panel">
-        <h2>Applications</h2>
-        <table>
-            <thead>
+<section class="table-panel wide" style="margin-top: 18px;">
+    <h2>Applications</h2>
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Student</th>
+            <th>Program</th>
+            <th>Status</th>
+            <th>Submitted</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <?php if (!$applications): ?>
+            <tr><td colspan="6" class="muted">No applications found.</td></tr>
+        <?php endif; ?>
+        <?php foreach ($applications as $application): ?>
             <tr>
-                <th>ID</th>
-                <th>Student</th>
-                <th>Program</th>
-                <th>Status</th>
-                <th>Submitted</th>
-                <th>Action</th>
+                <td>#<?= (int) $application['application_id'] ?></td>
+                <td><?= e($application['name']) ?><br><span class="muted"><?= e($application['email']) ?></span></td>
+                <td><?= e($application['program']) ?></td>
+                <td><span class="<?= e(status_class($application['status'])) ?>"><?= e($application['status']) ?></span></td>
+                <td><?= format_datetime($application['submission_date']) ?></td>
+                <td><a class="btn secondary" href="review_application.php?id=<?= (int) $application['application_id'] ?>">Review</a></td>
             </tr>
-            </thead>
-            <tbody>
-            <?php if (!$applications): ?>
-                <tr><td colspan="6" class="muted">No applications found.</td></tr>
-            <?php endif; ?>
-            <?php foreach ($applications as $application): ?>
-                <tr>
-                    <td>#<?= (int) $application['application_id'] ?></td>
-                    <td><?= e($application['name']) ?><br><span class="muted"><?= e($application['email']) ?></span></td>
-                    <td><?= e($application['program']) ?></td>
-                    <td><span class="<?= e(status_class($application['status'])) ?>"><?= e($application['status']) ?></span></td>
-                    <td><?= format_datetime($application['submission_date']) ?></td>
-                    <td><a class="btn secondary" href="review_application.php?id=<?= (int) $application['application_id'] ?>">Review</a></td>
-                </tr>
-            <?php endforeach; ?>
-            </tbody>
-        </table>
+        <?php endforeach; ?>
+        </tbody>
+    </table>
+</section>
+
+<section class="grid two" style="margin-top: 18px;">
+    <article class="panel">
+        <h2>Open Inquiries</h2>
+        <?php if (!$openInquiries): ?>
+            <p class="muted">No open inquiries.</p>
+        <?php else: ?>
+            <ul class="list">
+                <?php foreach ($openInquiries as $inquiry): ?>
+                    <li>
+                        <strong><?= e($inquiry['subject']) ?></strong>
+                        <br><span class="muted"><?= e($inquiry['name']) ?> | <?= format_datetime($inquiry['created_at']) ?></span>
+                    </li>
+                <?php endforeach; ?>
+            </ul>
+        <?php endif; ?>
+        <div class="actions">
+            <a class="btn secondary" href="manage_inquiries.php">Manage Inquiries</a>
+        </div>
     </article>
 
     <article class="panel">
