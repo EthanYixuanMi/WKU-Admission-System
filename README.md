@@ -125,65 +125,54 @@ flowchart TD
 
 ```mermaid
 flowchart LR
-    subgraph StudentArea[Student]
-        direction TB
-        Student((Student))
-        S1[Register and Login]
-        S2[Submit Application]
-        S3[Upload Documents]
-        S4[Track Application Status]
-        S5[Receive Notifications]
-        S6[Submit Inquiry]
-        S7[View / Accept Offer Letter]
-        S8[Confirm Enrollment]
+    Student((Student))
+    Officer((Admission Officer))
+    Admin((Admin))
 
-        Student --> S1
-        Student --> S2
-        Student --> S3
-        Student --> S4
-        Student --> S5
-        Student --> S6
-        Student --> S7
-        Student --> S8
-    end
+    UC1[Register and Login]
+    UC2[Submit Application]
+    UC3[Upload Documents]
+    UC4[Track Application Status]
+    UC5[Receive Notifications]
+    UC6[Submit Inquiry]
+    UC7[View / Accept Offer Letter]
+    UC8[Confirm Enrollment]
 
-    subgraph OfficerArea[Admission Officer]
-        direction TB
-        Officer((Admission Officer))
-        O1[Login]
-        O2[Review Applications]
-        O3[Verify Documents]
-        O4[Approve or Reject Applications]
-        O5[Reply Inquiry]
+    UC9[Review Applications]
+    UC10[Verify Documents]
+    UC11[Approve or Reject Applications]
+    UC12[Reply Inquiry]
 
-        Officer --> O1
-        Officer --> O2
-        Officer --> O3
-        Officer --> O4
-        Officer --> O5
-    end
+    UC13[Manage Users]
+    UC14[View Statistics and Reports]
+    UC15[Publish Announcements]
+    UC16[Manage Payment]
+    UC17[View Email Log]
+    UC18[Track Enrollment Reports]
 
-    subgraph AdminArea[Admin]
-        direction TB
-        Admin((Admin))
-        A1[Login]
-        A2[Reply Inquiry]
-        A3[Manage Users]
-        A4[View Statistics and Reports]
-        A5[Publish Announcements]
-        A6[Manage Payment]
-        A7[View Email Log]
-        A8[Track Enrollment Reports]
+    Student --> UC1
+    Student --> UC2
+    Student --> UC3
+    Student --> UC4
+    Student --> UC5
+    Student --> UC6
+    Student --> UC7
+    Student --> UC8
 
-        Admin --> A1
-        Admin --> A2
-        Admin --> A3
-        Admin --> A4
-        Admin --> A5
-        Admin --> A6
-        Admin --> A7
-        Admin --> A8
-    end
+    Officer --> UC1
+    Officer --> UC9
+    Officer --> UC10
+    Officer --> UC11
+    Officer --> UC12
+
+    Admin --> UC1
+    Admin --> UC12
+    Admin --> UC13
+    Admin --> UC14
+    Admin --> UC15
+    Admin --> UC16
+    Admin --> UC17
+    Admin --> UC18
 ```
 
 ---
@@ -264,23 +253,17 @@ wku_admission/
 │   └── styles.css
 │
 ├── config/
-│   ├── database.php
-│   └── mail.php
+│   └── database.php
 │
 ├── database/
-│   ├── schema.sql
-│   └── feature_upgrade.sql
+│   └── schema.sql
 │
 ├── docs/
-│   ├── OOAD_Documentation.md
-│   ├── Group_Contribution.md
-│   ├── Test_Record.md
-│   └── screenshots/
+│   └── OOAD_Documentation.md
 │
 ├── includes/
 │   ├── ApplicationService.php
 │   ├── Auth.php
-│   ├── EmailService.php
 │   ├── helpers.php
 │   ├── header.php
 │   └── footer.php
@@ -288,16 +271,12 @@ wku_admission/
 ├── uploads/
 │
 ├── index.php
-├── login.php
-├── logout.php
 ├── register.php
 ├── student_dashboard.php
 ├── application_form.php
 ├── upload_document.php
-├── student_inquiries.php
 ├── officer_dashboard.php
 ├── review_application.php
-├── manage_inquiries.php
 ├── admin_dashboard.php
 └── README.md
 ```
@@ -334,8 +313,6 @@ Main database tables:
 
 ```mermaid
 classDiagram
-    direction LR
-
     class Database {
         -mysqli connection
         +connection() mysqli
@@ -347,13 +324,6 @@ classDiagram
         +user() array
         +requireRole(roles) array
         +logout()
-    }
-
-    class EmailService {
-        +smtpEnabled() bool
-        +queueToUser(userId, subject, body)
-        +queue(userId, recipientEmail, subject, body)
-        +recentLogs(limit) array
     }
 
     class ApplicationService {
@@ -379,6 +349,13 @@ classDiagram
         +emailLogs(limit) array
         +applicationCounts() array
         +addAnnouncement(adminId, title, body, deadline)
+    }
+
+    class EmailService {
+        +smtpEnabled() bool
+        +queueToUser(userId, subject, body)
+        +queue(userId, recipientEmail, subject, body)
+        +recentLogs(limit) array
     }
 
     class User {
@@ -443,8 +420,8 @@ classDiagram
     }
 
     Database <.. Auth
-    Database <.. EmailService
     Database <.. ApplicationService
+    Database <.. EmailService
     ApplicationService ..> EmailService
     User "1" --> "0..*" Application
     Application "1" --> "0..*" Document
