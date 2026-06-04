@@ -123,57 +123,7 @@ flowchart TD
 
 ## 6. Role-Based Use Case Diagram
 
-```mermaid
-flowchart LR
-    Student((Student))
-    Officer((Admission Officer))
-    Admin((Admin))
-
-    UC1[Register and Login]
-    UC2[Submit Application]
-    UC3[Upload Documents]
-    UC4[Track Application Status]
-    UC5[Receive Notifications]
-    UC6[Submit Inquiry]
-    UC7[View / Accept Offer Letter]
-    UC8[Confirm Enrollment]
-
-    UC9[Review Applications]
-    UC10[Verify Documents]
-    UC11[Approve or Reject Applications]
-    UC12[Reply Inquiry]
-
-    UC13[Manage Users]
-    UC14[View Statistics and Reports]
-    UC15[Publish Announcements]
-    UC16[Manage Payment]
-    UC17[View Email Log]
-    UC18[Track Enrollment Reports]
-
-    Student --> UC1
-    Student --> UC2
-    Student --> UC3
-    Student --> UC4
-    Student --> UC5
-    Student --> UC6
-    Student --> UC7
-    Student --> UC8
-
-    Officer --> UC1
-    Officer --> UC9
-    Officer --> UC10
-    Officer --> UC11
-    Officer --> UC12
-
-    Admin --> UC1
-    Admin --> UC12
-    Admin --> UC13
-    Admin --> UC14
-    Admin --> UC15
-    Admin --> UC16
-    Admin --> UC17
-    Admin --> UC18
-```
+[View PDF](admission_use_case_diagram_filled.pdf)
 
 ---
 
