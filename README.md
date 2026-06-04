@@ -123,7 +123,7 @@ flowchart TD
 
 ## 6. Role-Based Use Case Diagram
 
-[View PDF](admission_use_case_diagram_filled.pdf)
+![Preview](admission_use_case_diagram_filled.png)
 
 ---
 
