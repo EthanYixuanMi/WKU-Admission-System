@@ -60,40 +60,7 @@ The system is a web-based admission management platform for international studen
 
 ### 6.1 Use Case Diagram
 
-```mermaid
-flowchart LR
-    Student((Student))
-    Officer((Admission Officer))
-    Admin((Admin))
-
-    UC1[Register and Login]
-    UC2[Submit Application]
-    UC3[Upload Documents]
-    UC4[Track Status]
-    UC5[Receive Notifications]
-    UC6[Review Applications]
-    UC7[Verify Documents]
-    UC8[Approve or Reject]
-    UC9[Manage Users]
-    UC10[Generate Reports]
-    UC11[Manage Announcements]
-
-    Student --> UC1
-    Student --> UC2
-    Student --> UC3
-    Student --> UC4
-    Student --> UC5
-
-    Officer --> UC1
-    Officer --> UC6
-    Officer --> UC7
-    Officer --> UC8
-
-    Admin --> UC1
-    Admin --> UC9
-    Admin --> UC10
-    Admin --> UC11
-```
+![Preview](WKU-Admission-System/Class_Diagram.png)
 
 ### 6.2 Sequence Diagram: Student Application Submission
 
