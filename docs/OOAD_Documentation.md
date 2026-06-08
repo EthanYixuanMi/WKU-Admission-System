@@ -64,76 +64,15 @@ The system is a web-based admission management platform for international studen
 
 ### 6.2 Sequence Diagram: Student Application Submission
 
-```mermaid
-sequenceDiagram
-    actor Student
-    participant UI as PHP Web UI
-    participant Auth as Auth Class
-    participant Service as ApplicationService
-    participant DB as MySQL Database
-
-    Student->>UI: Log in
-    UI->>Auth: verify email and password
-    Auth->>DB: SELECT user
-    DB-->>Auth: user record
-    Auth-->>UI: authenticated session
-    Student->>UI: Fill application form
-    UI->>Service: saveApplication(data, submit=true)
-    Service->>DB: INSERT or UPDATE application
-    Service->>DB: INSERT notification
-    DB-->>Service: success
-    UI-->>Student: Show submitted status
-```
+![Preview](../Sequence_Diagram.png)
 
 ### 6.3 Activity Diagram: Application Review Workflow
 
-```mermaid
-flowchart TD
-    A[Application Submitted] --> B[Officer Opens Review Page]
-    B --> C[Check Uploaded Documents]
-    C --> D{Documents Complete?}
-    D -- No --> E[Mark Need More Documents]
-    E --> F[Student Receives Notification]
-    F --> G[Student Uploads Missing Files]
-    G --> B
-    D -- Yes --> H[Evaluate Application]
-    H --> I{Admission Decision}
-    I -- Approve --> J[Status Approved]
-    I -- Reject --> K[Status Rejected]
-    J --> L[Student Receives Decision]
-    K --> L
-```
+![Preview](../Activity_Diagram.png)
 
 ### 6.4 Class Diagram
 
-```mermaid
-classDiagram
-    class Database {
-        -mysqli connection
-        +connection() mysqli
-    }
-
-    class Auth {
-        +login(email, password) bool
-        +registerStudent(name, email, password, nationality) bool
-        +user() array
-        +requireRole(roles) array
-        +logout()
-    }
-
-    class ApplicationService {
-        +getStudentApplication(userId) array
-        +saveApplication(userId, data, submit) int
-        +addDocument(applicationId, type, fileName, filePath)
-        +getDocuments(applicationId) array
-        +reviewApplication(applicationId, officerId, decision, remarks)
-        +applicationCounts() array
-        +addAnnouncement(adminId, title, body, deadline)
-    }
-
-    Database <.. Auth
-    Database <.. ApplicationService
-```
+![Preview](../Class_Diagram.png)
 
 ## 7. Database Schema
 
