@@ -320,19 +320,7 @@ uploads/app_1/english_test.pdf
 
 Supported document workflow:
 
-```mermaid
-flowchart TD
-    A[Student Uploads Document] --> B[System Stores File Locally]
-    B --> C[Document Status: Pending]
-    C --> D[Officer Reviews Document]
-    D --> E{Verification Result}
-    E -- Verified --> F[Document Status: Verified]
-    F --> G[Student Receives Notification]
-    E -- Rejected --> H[Document Status: Rejected]
-    H --> I[Student Receives Feedback]
-    I --> J[Email Notification Queued / Email Log Saved]
-    G --> J
-```
+![Preview](Document_Verification_Flow.png)
 
 ---
 
