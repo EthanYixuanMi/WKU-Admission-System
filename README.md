@@ -93,35 +93,11 @@ The goal of this MVP is to demonstrate a complete online admission workflow usin
 
 ## 5. System Workflow
 
-```mermaid
-flowchart TD
-    A[Student Registers / Logs In] --> B[Fill Application Form]
-    B --> C[Upload Required Documents]
-    C --> D[Submit Application]
-    D --> E[Create Application Fee Record]
-    E --> F[Officer Reviews Application]
-    F --> G{Documents Complete?}
-    G -- No --> H[Need More Documents]
-    H --> I[Student Receives Notification and Email Log Entry]
-    I --> C
-    G -- Yes --> J[Officer Makes Decision]
-    J --> K{Decision}
-    K -- Approved --> L[Application Approved]
-    L --> M[Generate Offer Letter]
-    M --> N[Send Email Notification / Save Email Log]
-    N --> O[Student Views and Accepts Offer Letter]
-    O --> P[Confirm Enrollment]
-    P --> Q[Student Views Final Enrollment Status]
-    K -- Rejected --> R[Application Rejected]
-    R --> S[Student Receives Decision Notification]
-
-    T[Student Submits Inquiry] --> U[Officer or Admin Replies Inquiry]
-    U --> V[Student Views Inquiry Reply]
-```
+![Preview](Flow_Chart.png)
 
 ---
 
-## 5. Activity Diagram
+## 6. Activity Diagram
 
 ![Preview](Activity_Diagram.png)
 
