@@ -121,23 +121,29 @@ flowchart TD
 
 ---
 
-## 6. Role-Based Use Case Diagram
+## 5. Activity Diagram
+
+![Preview](Activity_Diagram.png)
+
+---
+
+## 7. Role-Based Use Case Diagram
 
 ![Preview](admission_use_case_diagram_filled.png)
 
 ---
 
-## 7. Student Application Submission Sequence
+## 8. Student Application Submission Sequence
 
 ![Preview](Student_Application_Submission_Sequence.png)
 
-## 7.1 Officer Approval, Offer Letter, and Enrollment Sequence
+## 8.1 Officer Approval, Offer Letter, and Enrollment Sequence
 
 ![Preview](Officer_Approval_Offer_Letter_and_Enrollment_Sequence.png)
 
 ---
 
-## 8. Project Structure
+## 9. Project Structure
 
 ```text
 wku_admission/
@@ -176,7 +182,7 @@ wku_admission/
 
 ---
 
-## 9. Database Design
+## 10. Database Design
 
 The database name is:
 
@@ -202,7 +208,7 @@ Main database tables:
 
 ---
 
-## 10. Core PHP Classes
+## 11. Core PHP Classes
 
 ```mermaid
 classDiagram
@@ -328,7 +334,7 @@ classDiagram
 
 ---
 
-## 11. Installation and Running Guide
+## 12. Installation and Running Guide
 
 ### Step 1: Start WampServer
 
@@ -382,7 +388,7 @@ Then log in using one of the demo accounts.
 
 ---
 
-## 12. Default Database Configuration
+## 13. Default Database Configuration
 
 The default database configuration matches the standard WampServer MySQL setup:
 
@@ -401,7 +407,7 @@ config/database.php
 
 ---
 
-## 12.1 Email Notification Configuration
+## 13.1 Email Notification Configuration
 
 Default email settings are stored in:
 
@@ -429,7 +435,7 @@ Automatic notification delivery attempts are recorded in the Admin Dashboard Ema
 
 ---
 
-## 13. Main Pages
+## 14. Main Pages
 
 | Page | File |
 |---|---|
@@ -444,7 +450,7 @@ Automatic notification delivery attempts are recorded in the Admin Dashboard Ema
 
 ---
 
-## 14. Document Upload Design
+## 15. Document Upload Design
 
 Uploaded documents are stored locally under:
 
@@ -478,7 +484,7 @@ flowchart TD
 
 ---
 
-## 15. Application Status Flow
+## 16. Application Status Flow
 
 | Status | Meaning |
 |---|---|
@@ -491,7 +497,7 @@ flowchart TD
 
 ---
 
-## 16. Security Design
+## 17. Security Design
 
 This MVP includes several basic security practices:
 
@@ -503,7 +509,7 @@ This MVP includes several basic security practices:
 
 ---
 
-## 17. Test Plan
+## 18. Test Plan
 
 | Test Case | Steps | Expected Result | Status |
 |---|---|---|---|
@@ -520,7 +526,7 @@ This MVP includes several basic security practices:
 
 ---
 
-## 18. Known Issues
+## 19. Known Issues
 
 | Issue | Severity | Status |
 |---|---|---|
@@ -529,7 +535,7 @@ This MVP includes several basic security practices:
 
 ---
 
-## 19. Project Highlights
+## 20. Project Highlights
 
 - Complete admission workflow from student submission to officer decision.
 - Three-role system: Student, Admission Officer, and Admin.
@@ -541,7 +547,7 @@ This MVP includes several basic security practices:
 
 ---
 
-## 20. Future Improvements
+## 21. Future Improvements
 
 Possible future improvements include:
 
@@ -553,7 +559,7 @@ Possible future improvements include:
 
 ---
 
-## 21. User Acceptance Summary
+## 22. User Acceptance Summary
 
 The MVP supports the required international admission workflow, including student application submission, document upload, officer review, application status updates, notifications, admin monitoring, and announcements.
 
