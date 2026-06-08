@@ -133,13 +133,9 @@ flowchart TD
 
 ---
 
-## 8. Student Application Submission Sequence
+## 8. Sequence Diagram
 
-![Preview](Student_Application_Submission_Sequence.png)
-
-## 8.1 Officer Approval, Offer Letter, and Enrollment Sequence
-
-![Preview](Officer_Approval_Offer_Letter_and_Enrollment_Sequence.png)
+![Preview](Sequence_Diagram.png)
 
 ---
 
