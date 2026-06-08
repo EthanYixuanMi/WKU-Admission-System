@@ -105,7 +105,7 @@ The goal of this MVP is to demonstrate a complete online admission workflow usin
 
 ## 7. Role-Based Use Case Diagram
 
-![Preview](admission_use_case_diagram_filled.png)
+![Preview](Use_Case_Diagram.png)
 
 ---
 
