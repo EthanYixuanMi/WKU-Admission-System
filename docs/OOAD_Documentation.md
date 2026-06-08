@@ -60,7 +60,7 @@ The system is a web-based admission management platform for international studen
 
 ### 6.1 Use Case Diagram
 
-![Preview](./Class_Diagram.png)
+![Preview](WKU-Admission-System/Class_Diagram.png)
 
 ### 6.2 Sequence Diagram: Student Application Submission
 
