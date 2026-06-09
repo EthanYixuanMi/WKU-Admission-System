@@ -6,14 +6,6 @@ This project was developed as a CPS3962 final project MVP. It is designed to run
 
 ---
 
-## Code Repository
-
-The source code is available at:
-
-https://github.com/EthanYixuanMi/WKU-Admission-System
-
----
-
 ## 1. Project Overview
 
 The **WKU International Online Admission Management System** is a role-based admission platform for managing international student applications.
